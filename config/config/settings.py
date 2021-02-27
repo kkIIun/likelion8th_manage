@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
 
     # provider 구글 페이스북 카톡 깃헙
-    'allauth.socialaccount.providers.google'
+    'allauth.socialaccount.providers.google',
+    'imagekit',
 ]
 
 MIDDLEWARE = [
@@ -135,6 +136,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
