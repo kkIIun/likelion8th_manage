@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>간단한 지도 표시하기</title>
+    <script type="text/javascript"
+        src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=93q35jbcxe"></script>
+</head>
+<style>
+    body {
+        background-color: yellow;
+    }
+    section {
+        margin : 4rem auto;
+        width: 50vw;
+    }
+
+
+    .input textarea {
+        width: 100%;
+        height: 40vh;
+    }
+
+    .input .container {
+        width: 100%;
+    }
+
+    .input input {
+        margin: 0 auto;
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    .output .container {
+        padding: 5px;
+        background-color: cornflowerblue;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .container div {
+        margin: 0 auto;
+    }
+
+    .maps div {
+        margin: 2rem 0;
+    }
+</style>
+</head>
+
+<body>
+    {%load socialaccount%}
+    {% providers_media_js%}
+    <a href="/accounts/signup">회원가입</a>
+    {% if user.is_authenticated %}
+    {{user.username}}
+    <a href="/accounts/logout">로그아웃</a>
+    {% else %}
+    <a href="{%provider_login_url 'google' %}"> 구글 로그인</a> <br>
+    {% endif%}
+    <h2>Word Count!!</h2>
+    <section class="input">
+        <form method="GET" action="{% url 'wordcount' %}">
+            <textarea name="input"></textarea>
+            <div class="container" align="middle">
+                <input type="submit" value="입력">
+            </div>
+        </form>
+    </section>
+    <section class="output">
+        <div class="container">
+            <h2>result</h2>
+            <div style="border: 2px solid black; width: 90%">
+
+                {% for word,count in dict.items %}
+                <p>{{word}} : {{count}}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    <section class="maps">
+        <div id="map" style="width:100%;height:30vh;"></div>
+        <div id="map2" style="width:100%;height:30vh;"></div>
+    </section>
+    <section class="blog">
+        {% for blog in posts %}
+            <img src="{{blog.image.url}}" alt="" width="500">
+            <br>
+            {{blog.text}}
+            <br><br>
+            <img src="{{blog.image_thumbnail.url}}" alt="">
+        {% endfor %}
+    </section>
+
+    {% if posts.has_previous %}
+    <a href="?page=1">First</a>
+    <a href="?page={{posts.previous_page_number}}">Previous</a>
+    {% endif %}
+    <span>{{posts.number}}</span>
+    <span>of</span>
+    <span>{{posts.paginator.num_pages}}</span>
+    {% if psots.has_next%}
+    <a href="?page={{posts.next_page_number}}">Next</a>
+    <a href="?page={{posts.paginator.num_pages}}">Last</a>
+    {% endif %}
+
+    <script>
+        var mapOptions = {
+            center: new naver.maps.LatLng(37.3595704, 127.105399),
+            zoom: 15
+        };
+
+        var map = new naver.maps.Map('map', mapOptions);
+
+        var mapOptions2 = {
+            center: new naver.maps.LatLng(37.6109964, 127.004258),
+            zoom: 15
+        };
+
+        var map2 = new naver.maps.Map('map2', mapOptions2);
+    </script>
+</body>
+
+</html>
